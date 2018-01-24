@@ -13,8 +13,27 @@ intermediates := $(call local-generated-sources-dir, COMMON)
 HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 
 LOCAL_JAVA_LIBRARIES := \
-	android.hidl.base-V1.0-java \
+    android.hidl.base-V1.0-java \
 
+
+#
+# Build types.hal (candyFeature)
+#
+GEN := $(intermediates)/vendor/candy/power/V1_0/CandyFeature.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.candy:hardware/candy/interfaces \
+        vendor.candy.power@1.0::types.CandyFeature
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
 # Build types.hal (CandyPowerHint)
@@ -25,13 +44,34 @@ $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 $(GEN): PRIVATE_CUSTOM_TOOL = \
-		$(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
-		-Ljava \
-		-randroid.hidl:system/libhidl/transport \
-		-rvendor.candy:hardware/candy/interfaces \
-		vendor.candy.power@1.0::types.CandyPowerHint
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.candy:hardware/candy/interfaces \
+        vendor.candy.power@1.0::types.CandyPowerHint
 
 $(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build ICandyPower.hal
+#
+GEN := $(intermediates)/vendor/candy/power/V1_0/ICandyPower.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICandyPower.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
+$(GEN): $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.candy:hardware/candy/interfaces \
+        vendor.candy.power@1.0::ICandyPower
+
+$(GEN): $(LOCAL_PATH)/ICandyPower.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
 include $(BUILD_JAVA_LIBRARY)
@@ -48,8 +88,27 @@ intermediates := $(call local-generated-sources-dir, COMMON)
 HIDL := $(HOST_OUT_EXECUTABLES)/hidl-gen$(HOST_EXECUTABLE_SUFFIX)
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
-	android.hidl.base-V1.0-java-static \
+    android.hidl.base-V1.0-java-static \
 
+
+#
+# Build types.hal (CandyFeature)
+#
+GEN := $(intermediates)/vendor/candy/power/V1_0/CandyFeature.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.candy:hardware/candy/interfaces \
+        vendor.candy.power@1.0::types.CandyFeature
+
+$(GEN): $(LOCAL_PATH)/types.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
 
 #
 # Build types.hal (CandyPowerHint)
@@ -60,15 +119,38 @@ $(GEN): PRIVATE_HIDL := $(HIDL)
 $(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/types.hal
 $(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
 $(GEN): PRIVATE_CUSTOM_TOOL = \
-		$(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
-		-Ljava \
-		-randroid.hidl:system/libhidl/transport \
-		-rvendor.candy:hardware/candy/interfaces \
-		vendor.candy.power@1.0::types.candyPowerHint
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.candy:hardware/candy/interfaces \
+        vendor.candy.power@1.0::types.CandyPowerHint
 
 $(GEN): $(LOCAL_PATH)/types.hal
 	$(transform-generated-source)
 LOCAL_GENERATED_SOURCES += $(GEN)
+
+#
+# Build ICandyPower.hal
+#
+GEN := $(intermediates)/vendor/candy/power/V1_0/ICandyPower.java
+$(GEN): $(HIDL)
+$(GEN): PRIVATE_HIDL := $(HIDL)
+$(GEN): PRIVATE_DEPS := $(LOCAL_PATH)/ICandyPower.hal
+$(GEN): PRIVATE_DEPS += $(LOCAL_PATH)/types.hal
+$(GEN): $(LOCAL_PATH)/types.hal
+$(GEN): PRIVATE_OUTPUT_DIR := $(intermediates)
+$(GEN): PRIVATE_CUSTOM_TOOL = \
+        $(PRIVATE_HIDL) -o $(PRIVATE_OUTPUT_DIR) \
+        -Ljava \
+        -randroid.hidl:system/libhidl/transport \
+        -rvendor.candy:hardware/candy/interfaces \
+        vendor.candy.power@1.0::ICandyPower
+
+$(GEN): $(LOCAL_PATH)/ICandyPower.hal
+	$(transform-generated-source)
+LOCAL_GENERATED_SOURCES += $(GEN)
 include $(BUILD_STATIC_JAVA_LIBRARY)
+
+
 
 include $(call all-makefiles-under,$(LOCAL_PATH))

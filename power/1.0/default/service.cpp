@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package vendor.candy.power@1.0;
 
-/** Power hint identifiers passed to powerHint() */
-enum CandyPowerHint : uint32_t {
-    /**
-     * An operation is happening where it would be ideal for the CPU to
-     * be boosted for a specific duration. The data parameter is an
-     * integer value of the boost duration in microseconds.
-     */
-    CPU_BOOST = 0x00000110,
+#define LOG_TAG "vendor.candy.power@1.0-service"
 
-    SET_PROFILE = 0x00000111
-};
+#include <vendor/candy/power/1.0/ICandyPower.h>
+#include <hidl/LegacySupport.h>
 
-enum CandyFeature : uint32_t {
-    SUPPORTED_PROFILES = 0x00001000
-};
+using vendor::candy::power::V1_0::ICandyPower;
+using android::hardware::defaultPassthroughServiceImplementation;
+
+int main() {
+    return defaultPassthroughServiceImplementation<ICandyPower>();
+}
