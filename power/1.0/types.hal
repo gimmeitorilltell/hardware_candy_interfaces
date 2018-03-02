@@ -21,10 +21,17 @@ enum CandyPowerHint : uint32_t {
      * An operation is happening where it would be ideal for the CPU to
      * be boosted for a specific duration. The data parameter is an
      * integer value of the boost duration in microseconds.
-     */
+     *
+	 * Devices goes into dozing mode, a powersave-mode
+	 * should be entered and several unrequired input-devices
+	 * like hardware-touchkeys and fingerprint-sensors may
+	 * be disabled here.
+	 */
     CPU_BOOST = 0x00000110,
 
-    SET_PROFILE = 0x00000111
+    SET_PROFILE = 0x00000111,
+
+	DOZING = 0x6E780001,
 };
 
 enum CandyFeature : uint32_t {
